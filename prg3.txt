@@ -1,0 +1,20 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(0)
+X = np.sort(5 * np.random.rand(80, 1), axis=0)
+y = np.sin(X).ravel() + 0.2 * np.random.randn(80)
+
+def loess(x, X, y, tau=0.5):
+    weights = np.exp(-((X - x) ** 2) / (2 * tau ** 2))
+    theta = np.sum(X * weights) / np.sum(X ** 2 * weights)
+    return theta * x
+
+x_pred = np.linspace(0, 5, 100)
+y_pred = [loess(x, X, y) for x in x_pred]  # Use default tau
+
+plt.scatter(X, y, c='r', marker='x', label='Data')
+plt.plot(x_pred, y_pred, c='b', label='LOESS Fit')
+plt.legend()
+plt.title('Locally Weighted Regression (LOESS)')
+plt.show()

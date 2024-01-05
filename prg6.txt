@@ -1,0 +1,39 @@
+import numpy as np
+
+env = np.array([[0, 0, 0, 1, 0], [0, 1, 0, 1, 0], [0, 1, 0, 1, 0], [0, 0, 0, 1, 2]])
+Q = np.zeros((20, 4))  # 20 states for a 4x5 grid, 4 actions
+
+def state_to_index(state):
+    return state[0] * 5 + state[1]  # 5 columns in the grid
+
+def move(state, action):
+    new_state = (max(state[0] - 1, 0), state[1]) if action == 0 else \
+               (min(state[0] + 1, 3), state[1]) if action == 1 else \
+               (state[0], max(state[1] - 1, 0)) if action == 2 else \
+               (state[0], min(state[1] + 1, 4))  # Limit states to valid range
+    return new_state
+def find_path(Q):
+    state = (0, 0)
+    path = [state]
+    while state != (3, 4):
+        action = np.argmax(Q[state_to_index(state)])
+        state = move(state, action)
+        path.append(state)
+    return path
+
+
+for _ in range(1000):  # Train for 1000 episodes
+    state = (0, 0)
+    while state != (3, 4):  # Goal state
+        action = np.random.choice(4) if np.random.rand() < 0.2 else np.argmax(Q[state_to_index(state)])
+        new_state = move(state, action)
+        reward = -1 if env[new_state] == 1 else 10 if env[new_state] == 2 else 0
+        Q[state_to_index(state)][action] += 0.8 * (reward + 0.95 * np.max(Q[state_to_index(new_state)]) - Q[state_to_index(state)][action])
+        state = new_state
+
+optimal_path = find_path(Q)
+print("Optimal Path:")
+for state in optimal_path:
+    print(state)
+
+

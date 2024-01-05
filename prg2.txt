@@ -1,0 +1,24 @@
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
+import matplotlib.pyplot as plt
+
+# Load the dataset from a CSV file
+X = pd.read_csv('data.csv')[['PetalLengthCm', 'SepalWidthCm']].values
+
+# Number of clusters
+n_clusters = 3
+
+# Apply K-means clustering and EM clustering
+kmeans_labels = KMeans(n_clusters=n_clusters, random_state=0).fit_predict(X)
+gmm_labels = GaussianMixture(n_components=n_clusters, random_state=0).fit_predict(X)
+
+# Plot the results
+plt.figure(figsize=(8, 4))
+for i, (labels, title) in enumerate(zip([kmeans_labels, gmm_labels], ['K-means Clustering', 'EM Clustering'])):
+    plt.subplot(1, 2, i+1)
+    plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis')
+    plt.title(title)
+
+plt.tight_layout()
+plt.show()

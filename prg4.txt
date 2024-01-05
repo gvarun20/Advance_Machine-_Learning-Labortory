@@ -1,0 +1,16 @@
+from tensorflow import keras
+
+X = [[0, 0], [0, 1], [1, 0], [1, 1]] 
+y = [0, 1, 1, 0]
+
+model = keras.Sequential([ keras.layers.Input(shape=(2,)),
+                          keras.layers.Dense(4, activation='relu'), 
+                          keras.layers.Dense(1, activation='sigmoid') ])
+
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+model.fit(X, y, epochs=10)
+
+loss, accuracy = model.evaluate(X, y)
+
+print(f"Loss: {loss}, Accuracy: {accuracy}")
