@@ -1,0 +1,15 @@
+import random
+def generate_random_string(length):
+sample = '!@#$%^&*()_+=-?><,./:";{\|][ABCDEFGHIJKLMNOPQRSTUVWXYZqwertyuiopasdfghjklzxcvbnm '
+return ''.join(random.choice(sample) for _ in range(length))
+def print_hello_world():
+target_string = "HELLO WORLD"
+max_generations = 1000
+current_string = generate_random_string(len(target_string))
+for generation in range(1, max_generations + 1):
+current_string = ''.join(char if current_string[i] == char else generate_random_string(1) for i, char in enumerate(target_string))
+print(f"Generation {generation}: {current_string}")
+if current_string == target_string:
+break
+# Call the function to print the iterations
+print_hello_world()
