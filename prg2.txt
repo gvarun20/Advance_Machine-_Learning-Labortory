@@ -2,9 +2,11 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
 import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
 
-# Load the dataset from a CSV file
-X = pd.read_csv('data.csv')[['PetalLengthCm', 'SepalWidthCm']].values
+# Load the Iris dataset
+iris = load_iris()
+X = iris.data[:, [2, 1]]  # Using Petal Length and Sepal Width for clustering
 
 # Number of clusters
 n_clusters = 3
